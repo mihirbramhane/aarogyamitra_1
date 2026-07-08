@@ -58,12 +58,12 @@ def make_task_callback(job_id: str):
     return _callback
 
 
-async def run_job(job_id: str, profile_dict: dict, bill_path: str | None, build_response) -> None:
+def run_job(job_id: str, profile_dict: dict, bill_path: str | None, build_response) -> None:
     from app.crew import run_aarogyamitra  # local import avoids a circular import with main.py
 
     job = _JOBS[job_id]
     try:
-        result = await run_aarogyamitra(
+        result = run_aarogyamitra(
             profile_dict, bill_path, task_callback=make_task_callback(job_id)
         )
         job.result = build_response(result)

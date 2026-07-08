@@ -63,6 +63,9 @@ def build_tasks(agents: dict, profile: dict, bill_path: str | None) -> list:
         description=(
             "Use hospital_finder to list nearby hospitals where the top matched scheme's "
             "cashless treatment likely applies, based on the user's state/location and ailment. "
+            "IMPORTANT: when calling the hospital_finder tool, always pass scheme_name "
+            "(the name of the top matched scheme, e.g. 'Aarogyasri' or 'Ayushman Bharat PM-JAY') "
+            f"and state='{profile.get('state', '')}' so the tool can bias results correctly. "
             "Return the tool's results as-is in the required structured shape — do not invent "
             "hospitals or coordinates beyond what the tool returned. If the tool returns an "
             "empty list, your output MUST also have an empty 'items' list — under no "
@@ -70,7 +73,8 @@ def build_tasks(agents: dict, profile: dict, bill_path: str | None) -> list:
         ),
         expected_output=(
             "A JSON object with an 'items' list; each item has name, address, "
-            "latitude, longitude, phone and distance_note, matching the HospitalList schema."
+            "latitude, longitude, phone, distance_note, scheme_name, "
+            "empanelment_status, and distance_km, matching the HospitalList schema."
         ),
         agent=agents["hospital_finder"],
         context=[profile_task, scheme_task],

@@ -38,6 +38,15 @@ class Hospital(BaseModel):
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     phone: Optional[str] = None
+    scheme_name: str = ""
+    empanelment_status: str = Field(
+        "verify",
+        description="'confirmed' if the search was empanelment-specific and the "
+        "result matched, 'verify' otherwise. Not registry-verified.",
+    )
+    distance_km: Optional[float] = Field(
+        None, description="Haversine (straight-line) distance from the user in km."
+    )
 
 
 class SchemeList(BaseModel):

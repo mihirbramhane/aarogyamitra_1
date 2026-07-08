@@ -31,6 +31,9 @@ export interface Hospital {
   latitude?: number;
   longitude?: number;
   phone?: string;
+  scheme_name?: string;
+  empanelment_status?: "confirmed" | "verify";
+  distance_km?: number | null;
 }
 
 /** 'full' | 'partial' | 'none' | 'unknown' — see backend CoverageSummaryOutput. */

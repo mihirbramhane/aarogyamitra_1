@@ -7,7 +7,7 @@ from app.agents import build_agents
 from app.tasks import build_tasks
 
 
-async def run_aarogyamitra(
+def run_aarogyamitra(
     profile: dict,
     bill_path: str | None = None,
     task_callback: Optional[Callable] = None,
@@ -28,5 +28,5 @@ async def run_aarogyamitra(
         verbose=True,
         task_callback=task_callback,
     )
-    result = await crew.kickoff_async()
+    result = crew.kickoff()
     return result

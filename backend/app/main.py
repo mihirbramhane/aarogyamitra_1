@@ -14,6 +14,13 @@ import tempfile
 import uuid
 from typing import Optional
 
+# ── Intel OpenMP duplicate-library fix (Windows) ──────────────────────
+# Multiple Python packages (numpy, chromadb, scipy) each ship their own
+# copy of Intel's libiomp5md.dll. When they all load in the same process,
+# Intel's runtime aborts with "OMP: Error #15". Setting this env var
+# before any of those libraries are imported suppresses the fatal abort.
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
 # Windows' console defaults to the cp1252 codepage, which can't encode the
 # emoji/Unicode characters CrewAI's verbose logger prints (or Hindi/other
 # non-Latin guidance text) — that raises UnicodeEncodeError and crashes the
