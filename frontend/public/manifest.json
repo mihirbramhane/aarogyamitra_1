@@ -1,0 +1,12 @@
+{
+  "name": "AarogyaMitra — Your Health Scheme Guide",
+  "short_name": "AarogyaMitra",
+  "description": "Find free and subsidised hospital treatment you are legally entitled to under Ayushman Bharat, Aarogyasri & state schemes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0fdfa",
+  "theme_color": "#0f766e",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
