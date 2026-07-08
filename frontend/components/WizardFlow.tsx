@@ -14,11 +14,11 @@ export const WIZARD_STEPS = 6;
 // silently dropping/merging steps to match a 5-name list, so the step
 // indicator still reflects exactly what the form actually collects.
 const STEP_META: StepMeta[] = [
+  { icon: Languages, label: "Language" },
   { icon: MapPin, label: "Location" },
   { icon: Users, label: "Income & Family" },
   { icon: CreditCard, label: "Ration Card" },
   { icon: Stethoscope, label: "Ailment" },
-  { icon: Languages, label: "Language" },
   { icon: ClipboardCheck, label: "Review" },
 ];
 
@@ -101,13 +101,40 @@ function WizardStep({
     return (
       <Wizard
         key={0}
-        title={strings.stepState}
-        onSpeak={() => onSpeakStep(strings.stepState)}
+        title={strings.stepLanguage}
+        onSpeak={() => onSpeakStep(strings.stepLanguage)}
         tapToHearLabel={strings.tapToHear}
         footer={
           <button className="btn-primary" onClick={() => onNext(1)}>
             {strings.next}
           </button>
+        }
+      >
+        <IconChoice
+          value={form.language}
+          onChange={(v) => set("language", v)}
+          options={LANGUAGES.map((l) => ({
+            value: l.value,
+            label: l.label,
+            icon: <span style={{ fontSize: 22 }}>{l.flag}</span>,
+          }))}
+        />
+      </Wizard>
+    );
+  }
+
+  if (step === 1) {
+    return (
+      <Wizard
+        key={1}
+        title={strings.stepState}
+        onSpeak={() => onSpeakStep(strings.stepState)}
+        tapToHearLabel={strings.tapToHear}
+        footer={
+          <>
+            <button className="btn-ghost" onClick={() => onBack(0)}>{strings.back}</button>
+            <button className="btn-primary" onClick={() => onNext(2)}>{strings.next}</button>
+          </>
         }
       >
         <div className="input-group">
@@ -126,17 +153,17 @@ function WizardStep({
     );
   }
 
-  if (step === 1) {
+  if (step === 2) {
     return (
       <Wizard
-        key={1}
+        key={2}
         title={strings.stepIncome}
         onSpeak={() => onSpeakStep(strings.stepIncome)}
         tapToHearLabel={strings.tapToHear}
         footer={
           <>
-            <button className="btn-ghost" onClick={() => onBack(0)}>{strings.back}</button>
-            <button className="btn-primary" onClick={() => onNext(2)}>{strings.next}</button>
+            <button className="btn-ghost" onClick={() => onBack(1)}>{strings.back}</button>
+            <button className="btn-primary" onClick={() => onNext(3)}>{strings.next}</button>
           </>
         }
       >
@@ -164,17 +191,17 @@ function WizardStep({
     );
   }
 
-  if (step === 2) {
+  if (step === 3) {
     return (
       <Wizard
-        key={2}
+        key={3}
         title={strings.stepRationCard}
         onSpeak={() => onSpeakStep(strings.stepRationCard)}
         tapToHearLabel={strings.tapToHear}
         footer={
           <>
-            <button className="btn-ghost" onClick={() => onBack(1)}>{strings.back}</button>
-            <button className="btn-primary" onClick={() => onNext(3)}>{strings.next}</button>
+            <button className="btn-ghost" onClick={() => onBack(2)}>{strings.back}</button>
+            <button className="btn-primary" onClick={() => onNext(4)}>{strings.next}</button>
           </>
         }
       >
@@ -195,17 +222,17 @@ function WizardStep({
     );
   }
 
-  if (step === 3) {
+  if (step === 4) {
     return (
       <Wizard
-        key={3}
+        key={4}
         title={strings.stepAilment}
         onSpeak={() => onSpeakStep(strings.stepAilment)}
         tapToHearLabel={strings.tapToHear}
         footer={
           <>
-            <button className="btn-ghost" onClick={() => onBack(2)}>{strings.back}</button>
-            <button className="btn-primary" onClick={() => onNext(4)}>{strings.next}</button>
+            <button className="btn-ghost" onClick={() => onBack(3)}>{strings.back}</button>
+            <button className="btn-primary" onClick={() => onNext(5)}>{strings.next}</button>
           </>
         }
       >
@@ -229,33 +256,6 @@ function WizardStep({
             )}
           </div>
         </div>
-      </Wizard>
-    );
-  }
-
-  if (step === 4) {
-    return (
-      <Wizard
-        key={4}
-        title={strings.stepLanguage}
-        onSpeak={() => onSpeakStep(strings.stepLanguage)}
-        tapToHearLabel={strings.tapToHear}
-        footer={
-          <>
-            <button className="btn-ghost" onClick={() => onBack(3)}>{strings.back}</button>
-            <button className="btn-primary" onClick={() => onNext(5)}>{strings.next}</button>
-          </>
-        }
-      >
-        <IconChoice
-          value={form.language}
-          onChange={(v) => set("language", v)}
-          options={LANGUAGES.map((l) => ({
-            value: l.value,
-            label: l.label,
-            icon: <span style={{ fontSize: 22 }}>{l.flag}</span>,
-          }))}
-        />
       </Wizard>
     );
   }
@@ -285,11 +285,11 @@ function WizardStep({
         </div>
       </div>
       <ul className="review-summary">
+        <li>{LANGUAGES.find((l) => l.value === form.language)?.label}</li>
         <li>{form.state}{form.latitude ? " (📍 location shared)" : ""}</li>
         <li>₹{form.annual_income.toLocaleString("en-IN")} · {form.family_size} family members</li>
         <li>{form.ration_card_type || strings.rationNone}</li>
         <li>{form.ailment}</li>
-        <li>{LANGUAGES.find((l) => l.value === form.language)?.label}</li>
       </ul>
     </Wizard>
   );

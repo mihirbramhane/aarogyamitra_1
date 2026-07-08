@@ -139,13 +139,36 @@ const LANG_TAGS: Record<string, string> = {
   mr: "mr-IN",
 };
 
+function formatIndianNumbersForSpeech(text: string): string {
+  let t = text.replace(/₹\s*([\d,]+)/g, "$1 rupees");
+  t = t.replace(/(\d{1,2}),(\d{2}),(\d{3})/g, (match, lakhs, thousands, hundreds) => {
+    let res = `${lakhs} lakh`;
+    if (thousands !== "00") res += ` ${Number(thousands)} thousand`;
+    if (hundreds !== "000") res += ` ${Number(hundreds)}`;
+    return res;
+  });
+  t = t.replace(/(\d{1,2}),(\d{3})/g, (match, thousands, hundreds) => {
+    let res = `${thousands} thousand`;
+    if (hundreds !== "000") res += ` ${Number(hundreds)}`;
+    return res;
+  });
+  return t;
+}
+
 /** Speak the guidance aloud in the user's language. */
 export function speak(text: string, language = "en") {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
+  
+  const cleanText = formatIndianNumbersForSpeech(text);
+  const utter = new SpeechSynthesisUtterance(cleanText);
   utter.lang = LANG_TAGS[language] ?? "en-IN";
   utter.rate = 0.95;
+  
+  const voices = window.speechSynthesis.getVoices();
+  const voice = voices.find((v) => v.lang === utter.lang) || voices.find((v) => v.lang.includes("IN"));
+  if (voice) utter.voice = voice;
+
   window.speechSynthesis.speak(utter);
 }
 
